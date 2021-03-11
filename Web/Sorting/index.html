@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html>
+<title>Belajar Javascript</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu">
+	
+<style>
+.h1 {
+	text-align:center;
+	font-family: Ubuntu;
+}
+
+.p1 {
+	margin-left: 15px;
+	margin-top: 4px;
+	font-family: Ubuntu;
+	font-size: 16px;
+}
+
+textarea {
+	width: 95%;
+	height: 60px;
+	box-sizing: border-box;
+	border: 4px solid #ccc;
+	border-radius: 12px;
+	background-color: #f8f8f8;
+	font-size: 15px;	
+	margin-left: 25px;
+	padding: 2px 0;
+	text-align: center;
+	resize: none;
+	font-family: Ubuntu;
+}
+
+.button {
+  display: inline-block;
+  border-radius: 12px;
+  background-color: #f4511e;
+  border: none;
+  color: #ffff;
+  text-align: center;
+  font-size: 18px;
+  padding: 8px;
+  width: 150px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+  font-family: Ubuntu;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\22d9';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.button:hover span {
+  padding-right: 25px;
+}
+
+.button:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.container {
+  display: block;
+  position: relative;
+  padding-left: 45px;
+  margin-bottom: 2px;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: Ubuntu;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  position: absolute;
+  top: 4px;
+  left: 25px;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+.container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.container input:checked ~ .checkmark {
+  background-color: #f4511e;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.container .checkmark:after {
+ 	top: 4px;
+	left: 4px;
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: white;
+}
+</style>
+
+<body>
+
+<div>
+<h1 class="h1"><b>Tugas 2 Pengembangan Aplikasi Web: Sorting</b></h1>
+</div>
+
+<div>
+<article class="p1" align="justify">
+	<b>Deskripsi Program:</b><br>
+	&emsp; &emsp;
+	Laman web ini akan membangkitkan 15-75 bilangan acak dalam range -100 sampai 100 untuk diurutkan dari yang terbesar dan/atau terkecil.
+</article>
+
+<article class="p1">
+	<b>Cara Kerja:</b>
+	<ol class="p1">
+	<li>Klik tombol <b><i>Bangkitkan</i></b> untuk membangkitkan bilangan random</li>
+	<li>Pilih dahulu ingin diurutkan secara <b><i>Naik</i></b> atau <b><i>Turun</i></b></li>
+	<li>Klik tombol <b><i>Urutkan</i></b> untuk mengurutkan</li>
+	<li>Klik tombol <b><i>Hapus</i></b> untuk menghapus hasil dan memulai ulang</li>
+	</ol>	
+</article>
+</div>
+
+<div>
+<button class="button" style="vertical-align:middle" id="gen" 
+		onclick="document.getElementById('generate').innerHTML = generate(n_num())">
+		<span><b>Bangkitkan</b></span>
+</button></br>
+<textarea id="generate"></textarea></br>
+
+<button class="button" style="vertical-align:middle" id="sort" 
+		onclick="document.getElementById('sort!').innerHTML = urutkan(arr)">
+		<span><b>Urutkan</b></span>
+</button></br>
+<label  class="container" id="naik"><b>Naik</b>
+		<input type="radio" name="pilih" value="naik">
+		<span class="checkmark"></span>
+</label>
+<label class="container" id="turun"><b>Turun</b>
+		<input type="radio" name="pilih" value="turun">
+		<span class="checkmark"></span>
+</label>
+
+<textarea id="sort!"></textarea></br>
+
+<button class="button" style="vertical-align:middle" 
+		onclick="document.getElementById('reset').innerHTML = del(); 
+			     document.getElementById('generate').innerHTML = arr
+			     document.getElementById('sort!').innerHTML = arr">
+		<span><b>Hapus</b></span>
+</button>
+<p id="reset"></p></br>
+
+</div>
+
+<script>
+var arr=[];	
+
+function n_num(){	
+    return Math.floor(Math.random()*60)+15;
+}
+
+function generate(a){				
+	for(var i=0; i<a; i++)
+		arr.push(Math.floor(Math.random()*200+(-100)));			
+	document.getElementById("gen").disabled=true;	
+	return arr;	
+}
+
+function urutkan(a) { 
+	var e = document.getElementsByName("pilih");               
+	if (a.length === 0){
+		alert("Bangkitkan bilangan dulu!");		
+		return"";
+	}
+	if(e[0].checked === false && e[1].checked === false){
+			alert("Pilih naik atau turun dulu!");		
+		return"";
+	}
+	for(i = 0; i < e.length; i++) { 
+		if(e[0].checked){
+			return sort(a);
+		}
+		if(e[1].checked){
+			return sortT(a);
+		}	
+		
+	} 
+} 
+
+
+function sort(a){					
+	var b = a.length;				
+	for(var i=1; i<b; i++){
+		var key=a[i];
+		var j=i-1;
+		while(j>=0 && a[j]>key){
+			a[j+1]=a[j];
+			j--;
+		}
+		a[j+1]=key;
+	}			
+	return a;
+}
+function sortT(a){					
+	var b = a.length;				
+	for(var i=1; i<b; i++){
+		var key=a[i];
+		var j=i-1;
+		while(j>=0 && a[j]<key){
+			a[j+1]=a[j];
+			j--;
+		}
+		a[j+1]=key;
+	}			
+	return a;
+}
+
+function del(){
+	arr=[];	
+	document.getElementById("gen").disabled=false;
+	var e = document.getElementsByName("pilih");               
+	e[0].checked=false;
+	e[1].checked=false;
+    return arr;
+}
+
+</script>
+</body>
